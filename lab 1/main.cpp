@@ -8,19 +8,19 @@ int main() {
 	class TBitField
 	{
 	private:
-		int  BitLen; // длина битового поля - макс. к-во битов
-		TELEM* pMem; // память для представления битового поля
-		int  MemLen; // к-во эл-тов Мем для представления бит.поля
+		int  BitLen; // Г¤Г«ДЌГ­Е• ГЎДЌЕ€Г®ГўГ®ДѓГ® ДЏГ®Г«Л™ - Д›Е•Д™Е„. Д™-ГўГ® ГЎДЌЕ€Г®Гў
+		TELEM* pMem; // ДЏЕ•Д›Л™Е€Гј Г¤Г«Л™ ДЏД‘ДєГ¤Е„Е€Е•ГўГ«ДєГ­ДЌЛ™ ГЎДЌЕ€Г®ГўГ®ДѓГ® ДЏГ®Г«Л™
+		int  MemLen; // Д™-ГўГ® ГЅГ«-Е€Г®Гў ДљДєД› Г¤Г«Л™ ДЏД‘ДєГ¤Е„Е€Е•ГўГ«ДєГ­ДЌЛ™ ГЎДЌЕ€.ДЏГ®Г«Л™
 
-		// методы реализации
+		// Д›ДєЕ€Г®Г¤Е± Д‘ДєЕ•Г«ДЌГ§Е•Г¶ДЌДЌ
 
-		// индекс в pМем для бита n       (#О2)
+		// ДЌГ­Г¤ДєД™Е„ Гў pДљДєД› Г¤Г«Л™ ГЎДЌЕ€Е• n       (#ГЋ2)
 		int   GetMemIndex(const int n) const {
 			return n / (sizeof(TELEM) * 8);
 			
 		}
 		
-		// битовая маска для бита n       (#О3)
+		// ГЎДЌЕ€Г®ГўЕ•Л™ Д›Е•Е„Д™Е• Г¤Г«Л™ ГЎДЌЕ€Е• n       (#ГЋ3)
 		TELEM GetMemMask(const int n) const {
 			return TELEM(1) << (n % (sizeof(TELEM) * 8));
 		}
@@ -30,11 +30,11 @@ int main() {
 				throw std::invalid_argument("Bit length cannot be negative");
 			}
 
-			// Вычисляем необходимое количество элементов памяти
+			// Г‚Е±Г·ДЌЕ„Г«Л™ДєД› Г­ДєГ®ГЎЕ‘Г®Г¤ДЌД›Г®Дє Д™Г®Г«ДЌГ·ДєЕ„Е€ГўГ® ГЅГ«ДєД›ДєГ­Е€Г®Гў ДЏЕ•Д›Л™Е€ДЌ
 			MemLen = (len + sizeof(TELEM) * 8 - 1) / (sizeof(TELEM) * 8);
 			pMem = new TELEM[MemLen];
 
-			// Инициализируем память нулями
+			// ДЊГ­ДЌГ¶ДЌЕ•Г«ДЌГ§ДЌД‘ГіДєД› ДЏЕ•Д›Л™Е€Гј Г­ГіГ«Л™Д›ДЌ
 			for (int i = 0; i < MemLen; i++) {
 				pMem[i] = TELEM(0);
 			}
@@ -45,17 +45,17 @@ int main() {
 				pMem[i] = bf.pMem[i];
 			}
 		}
-		~TBitField();                      //                                    (#С)
+		~TBitField();                      //                                    (#Еѓ)
 
-		// доступ к битам
+		// Г¤Г®Е„Е€ГіДЏ Д™ ГЎДЌЕ€Е•Д›
 		// 
 		// 
-		// получить длину (к-во битов)
+		// ДЏГ®Г«ГіГ·ДЌЕ€Гј Г¤Г«ДЌГ­Гі (Д™-ГўГ® ГЎДЌЕ€Г®Гў)
 		int GetLength(void) const {
 			return BitLen;
 		}    
 
-		// установить бит 
+		// ГіЕ„Е€Е•Г­Г®ГўДЌЕ€Гј ГЎДЌЕ€ 
 		void SetBit(const int n) {
 			if (n < 0 || n >= BitLen) {
 				throw std::out_of_range("Bit index out of range");
@@ -65,7 +65,7 @@ int main() {
 
 		}
 
-		// очистить бит 
+		// Г®Г·ДЌЕ„Е€ДЌЕ€Гј ГЎДЌЕ€ 
 		void ClrBit(const int n) {
 			if (n < 0 || n >= BitLen) {
 				throw std::out_of_range("Bit index out of range");
@@ -77,7 +77,7 @@ int main() {
 		}
 
 
-		// получить значение бита
+		// ДЏГ®Г«ГіГ·ДЌЕ€Гј Г§Г­Е•Г·ДєГ­ДЌДє ГЎДЌЕ€Е•
 			int  GetBit(const int n)const {
 				int memIndex = GetMemIndex(n);
 				TELEM mask = GetMemMask(n);
@@ -90,9 +90,9 @@ int main() {
 
 
 
-		// надо учитывать, что TBitField может быть разной длины в int-ах
+		// Г­Е•Г¤Г® ГіГ·ДЌЕ€Е±ГўЕ•Е€Гј, Г·Е€Г® TBitField Д›Г®Д‡ДєЕ€ ГЎЕ±Е€Гј Д‘Е•Г§Г­Г®Г© Г¤Г«ДЌГ­Е± Гў int-Е•Е‘
 		// TBitField bf1(100) - 4 int, bf2(15) - 1 int
-		 // Оператор присваивания
+		 // ГЋДЏДєД‘Е•Е€Г®Д‘ ДЏД‘ДЌЕ„ГўЕ•ДЌГўЕ•Г­ДЌЛ™
 			TBitField& operator=(const TBitField& bf) {
 				if (this != &bf) {
 					delete[] pMem;
@@ -107,18 +107,18 @@ int main() {
 				}
 				return *this;
 			}            
-			// Операция "или" (#О6)
+			// ГЋДЏДєД‘Е•Г¶ДЌЛ™ "ДЌГ«ДЌ" (#ГЋ6)
 			TBitField operator|(const TBitField& bf) {
-				// Выбираем большую длину
+				// Г‚Е±ГЎДЌД‘Е•ДєД› ГЎГ®Г«ГјЕ™ГіЕЈ Г¤Г«ДЌГ­Гі
 				int max_len = (BitLen > bf.BitLen) ? BitLen : bf.BitLen;
 				TBitField result(max_len);
 
-				// Копируем биты из текущего объекта
+				// ДГ®ДЏДЌД‘ГіДєД› ГЎДЌЕ€Е± ДЌГ§ Е€ДєД™ГіЕЇДєДѓГ® Г®ГЎГєДєД™Е€Е•
 				for (int i = 0; i < MemLen; i++) {
 					result.pMem[i] = pMem[i];
 				}
 
-				// Применяем операцию OR с вторым объектом
+				// ДЋД‘ДЌД›ДєГ­Л™ДєД› Г®ДЏДєД‘Е•Г¶ДЌЕЈ OR Е„ ГўЕ€Г®Д‘Е±Д› Г®ГЎГєДєД™Е€Г®Д›
 				for (int i = 0; i < bf.MemLen; i++) {
 					result.pMem[i] |= bf.pMem[i];
 				}
@@ -127,27 +127,27 @@ int main() {
 			}
 
 
-			// Операция "и" (#Л2)
+			// ГЋДЏДєД‘Е•Г¶ДЌЛ™ "ДЌ" (#Г‹2)
 			TBitField operator&(const TBitField& bf) {
-				// Выбираем большую длину
+				// Г‚Е±ГЎДЌД‘Е•ДєД› ГЎГ®Г«ГјЕ™ГіЕЈ Г¤Г«ДЌГ­Гі
 				int max_len = (BitLen > bf.BitLen) ? BitLen : bf.BitLen;
 				TBitField result(max_len);
 
-				// Применяем операцию AND для общих частей
+				// ДЋД‘ДЌД›ДєГ­Л™ДєД› Г®ДЏДєД‘Е•Г¶ДЌЕЈ AND Г¤Г«Л™ Г®ГЎЕЇДЌЕ‘ Г·Е•Е„Е€ДєГ©
 				int min_mem_len = (MemLen < bf.MemLen) ? MemLen : bf.MemLen;
 				for (int i = 0; i < min_mem_len; i++) {
 					result.pMem[i] = pMem[i] & bf.pMem[i];
 				}
 
-				// Для оставшейся части (если поля разной длины)
-				// Биты из longer поля AND 0 = 0, поэтому просто оставляем нули
-				// которые уже есть в result после инициализации
+				// Г„Г«Л™ Г®Е„Е€Е•ГўЕ™ДєГ©Е„Л™ Г·Е•Е„Е€ДЌ (ДєЕ„Г«ДЌ ДЏГ®Г«Л™ Д‘Е•Г§Г­Г®Г© Г¤Г«ДЌГ­Е±)
+				// ГЃДЌЕ€Е± ДЌГ§ longer ДЏГ®Г«Л™ AND 0 = 0, ДЏГ®ГЅЕ€Г®Д›Гі ДЏД‘Г®Е„Е€Г® Г®Е„Е€Е•ГўГ«Л™ДєД› Г­ГіГ«ДЌ
+				// Д™Г®Е€Г®Д‘Е±Дє ГіД‡Дє ДєЕ„Е€Гј Гў result ДЏГ®Е„Г«Дє ДЌГ­ДЌГ¶ДЌЕ•Г«ДЌГ§Е•Г¶ДЌДЌ
 
 				return result;
 			}
 
 
-			// Сравнение (#О5)
+			// ЕѓД‘Е•ГўГ­ДєГ­ДЌДє (#ГЋ5)
 			int operator==(const TBitField& bf) const {
 				if (BitLen != bf.BitLen) return 0;
 
@@ -159,23 +159,23 @@ int main() {
 
 
 
-			// Сравнение (не равно)
+			// ЕѓД‘Е•ГўГ­ДєГ­ДЌДє (Г­Дє Д‘Е•ГўГ­Г®)
 			int operator!=(const TBitField& bf) const {
 				return !(*this == bf);
 			}
 
 
 
-			// Отрицание
+			// ГЋЕ€Д‘ДЌГ¶Е•Г­ДЌДє
 			TBitField operator~(void) {
 				TBitField result(BitLen);
 
-				// Инвертируем все биты
+				// ДЊГ­ГўДєД‘Е€ДЌД‘ГіДєД› ГўЕ„Дє ГЎДЌЕ€Е±
 				for (int i = 0; i < MemLen; i++) {
 					result.pMem[i] = ~pMem[i];
 				}
 
-				// Обнуляем лишние биты в последнем элементе
+				// ГЋГЎГ­ГіГ«Л™ДєД› Г«ДЌЕ™Г­ДЌДє ГЎДЌЕ€Е± Гў ДЏГ®Е„Г«ДєГ¤Г­ДєД› ГЅГ«ДєД›ДєГ­Е€Дє
 				int extra_bits = BitLen % (sizeof(TELEM) * 8);
 				if (extra_bits != 0) {
 					TELEM mask = (TELEM(1) << extra_bits) - 1;
@@ -185,8 +185,8 @@ int main() {
 				return result;
 			}
 
-		friend istream& operator>>(istream& istr, TBitField& bf);       //      (#О7)
-		friend ostream& operator<<(ostream& ostr, const TBitField& bf); //      (#П4)
+		friend istream& operator>>(istream& istr, TBitField& bf);       //      (#ГЋ7)
+		friend ostream& operator<<(ostream& ostr, const TBitField& bf); //      (#ДЋ4)
 	};
 
 }
