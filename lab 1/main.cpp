@@ -183,8 +183,51 @@ int main() {
 				return result;
 			}
 
-		friend istream& operator>>(istream& istr, TBitField& bf);       //      (#Î7)
-		friend ostream& operator<<(ostream& ostr, const TBitField& bf); //      (#Ď4)
+		friend istream& operator>>(istream& istr, TBitField& bf) {
+            int shift;
+            istr >> shift;
+            
+            if (shift < 0) {
+                istr.setstate(ios::failbit);
+                return istr;
+            }
+            
+            if (shift >= bf.BitLen) {
+                // Все биты сдвигаются за пределы - обнуляем поле
+                for (int i = 0; i < bf.MemLen; i++) {
+                    bf.pMem[i] = TELEM(0);
+                }
+                return istr;
+            }
+            
+            // Создаем временную копию для сдвига
+            TBitField temp(bf.BitLen);
+            for (int i = 0; i < bf.BitLen; i++) {
+                if (bf.GetBit(i)) {
+                    if (i + shift < bf.BitLen) {
+                        temp.SetBit(i + shift);
+                    }
+                }
+            }
+            
+            // Копируем результат обратно
+            for (int i = 0; i < bf.MemLen; i++) {
+                bf.pMem[i] = temp.pMem[i];
+            }
+            
+            return istr;
+        }
+
+        // Оператор битового сдвига вправо
+        friend ostream& operator<<(ostream& ostr, const TBitField& bf) {
+            // Выводим битовое поле как строку
+            for (int i = 0; i < bf.BitLen; i++) {
+                ostr << (bf.GetBit(i) ? '1' : '0');
+            }
+            return ostr;
+        }
+    };
+
 	};
 
 }
